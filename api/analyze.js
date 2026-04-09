@@ -8,25 +8,34 @@ export default async function handler(req, res) {
     const { desc } = req.body;
 
     const prompt = `
-Eres un dermatólogo estético de alto nivel.
+Actúa como un dermatólogo estético de alto nivel, con criterio refinado y comunicación elegante.
 
 Analiza este caso:
 "${desc}"
 
-Responde en este formato:
+Responde de forma breve, precisa y con autoridad.
 
-Evaluación inicial:
-(qué se observa sin diagnosticar)
+Estructura:
 
-Qué significa:
-(interpretación estética)
+1. Lectura estética:
+Describe lo que probablemente ocurre sin afirmar diagnóstico.
 
-Plan por etapas:
-(orden lógico clínico)
+2. Interpretación:
+Qué impacto tiene en la armonía facial (sin generalidades).
 
-Nota final:
-(invitar a valoración presencial sin sonar comercial)
-    `;
+3. Dirección:
+Qué se debería evaluar o ajustar (sin explicar todo el tratamiento).
+
+4. Cierre:
+Invita a valoración presencial de forma natural, sin sonar comercial.
+
+Reglas:
+- Máximo 120-150 palabras
+- Lenguaje sobrio, no didáctico
+- No listas largas
+- No explicaciones básicas
+- Debe sentirse exclusivo, no genérico
+`;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
@@ -42,7 +51,7 @@ Nota final:
 
     const data = await response.json();
 
-    const text = data.output[0].content[0].text;
+    const text = data.output?.[0]?.content?.[0]?.text || "No se pudo generar respuesta.";
 
     return res.status(200).json({ text });
 
