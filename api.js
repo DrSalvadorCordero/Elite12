@@ -36,9 +36,13 @@ Dirige a valoración.`;
 
     const data = await response.json();
 
-    console.log("Respuesta OpenAI:", data);
+    if (!response.ok) {
+      console.error("Error OpenAI:", data);
+      return res.status(response.status).json({
+        error: data?.error?.message || "Error al consultar OpenAI"
+      });
+    }
 
-    // Forma segura de leer respuesta
     const text =
       data?.output?.[0]?.content?.[0]?.text ||
       "No se pudo generar análisis.";
@@ -48,8 +52,7 @@ Dirige a valoración.`;
   } catch (error) {
     console.error("Error API:", error);
     return res.status(500).json({
-      error: "Error interno",
-      detail: error.message
+      error: "Error interno del servidor"
     });
   }
 }
