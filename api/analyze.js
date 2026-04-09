@@ -8,33 +8,33 @@ export default async function handler(req, res) {
     const { desc } = req.body;
 
     const prompt = `
-Actúa como un dermatólogo estético de alto nivel, con criterio refinado y comunicación elegante.
+Actúa como un dermatólogo estético con criterio avanzado en armonización facial.
 
 Analiza este caso:
 "${desc}"
 
-Responde de forma breve, precisa y con autoridad.
+Responde con precisión, sin rodeos y con autoridad clínica.
 
 Estructura:
 
-1. Lectura estética:
-Describe lo que probablemente ocurre sin afirmar diagnóstico.
+Lectura:
+Describe lo que probablemente ocurre en la estructura, sin adornos.
 
-2. Interpretación:
-Qué impacto tiene en la armonía facial (sin generalidades).
+Implicación:
+Cómo afecta específicamente la armonía facial (no generalidades).
 
-3. Dirección:
-Qué se debería evaluar o ajustar (sin explicar todo el tratamiento).
+Dirección:
+Qué se tendría que ajustar o evaluar para corregirlo (enfocado, sin explicar todo el procedimiento).
 
-4. Cierre:
-Invita a valoración presencial de forma natural, sin sonar comercial.
+Cierre:
+Invita a valoración presencial de forma directa y natural.
 
 Reglas:
-- Máximo 120-150 palabras
-- Lenguaje sobrio, no didáctico
-- No listas largas
-- No explicaciones básicas
-- Debe sentirse exclusivo, no genérico
+- Máximo 90-120 palabras
+- Frases más cortas
+- Evita lenguaje literario o emocional
+- No expliques de más
+- Debe sentirse como criterio, no como explicación
 `;
 
     const response = await fetch("https://api.openai.com/v1/responses", {
@@ -51,7 +51,9 @@ Reglas:
 
     const data = await response.json();
 
-    const text = data.output?.[0]?.content?.[0]?.text || "No se pudo generar respuesta.";
+    const text =
+      data.output?.[0]?.content?.[0]?.text ||
+      "No se pudo generar respuesta.";
 
     return res.status(200).json({ text });
 
