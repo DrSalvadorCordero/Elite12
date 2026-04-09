@@ -21,6 +21,6 @@ document.getElementById("result").innerText=data.text;
 
 const msg=encodeURIComponent("Evaluación:\n\n"+data.text);
 
-document.getElementById("whatsappBtn").href="https://wa.me/TUNUMERO?text="+msg;
+document.getElementById("whatsappBtn").href="https://wa.me/5219992809758?text="+msg;
 document.getElementById("whatsappBtn").innerText="Continuar por WhatsApp";
 }
