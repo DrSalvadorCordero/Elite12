@@ -1,7 +1,16 @@
-export default async function handler(req,res){
-const {desc}=req.body;
+export default async function handler(req, res) {
+  try {
+    if (req.method !== "POST") {
+      return res.status(405).json({ error: "Método no permitido" });
+    }
 
-const prompt=`Analiza este caso estético:
+    const { desc } = req.body || {};
+
+    if (!desc) {
+      return res.status(400).json({ error: "Falta descripción" });
+    }
+
+    const prompt = `Analiza este caso estético:
 ${desc}
 
 Responde:
@@ -13,21 +22,34 @@ Lenguaje clínico elegante.
 No diagnostiques.
 Dirige a valoración.`;
 
-const response=await fetch("https://api.openai.com/v1/responses",{
-method:"POST",
-headers:{
-"Authorization":`Bearer ${process.env.OPENAI_API_KEY}`,
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-model:"gpt-5",
-input:prompt
-})
-});
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-5",
+        input: prompt
+      })
+    });
 
-const data=await response.json();
+    const data = await response.json();
 
-res.status(200).json({
-text:data.output[0].content[0].text
-});
+    console.log("Respuesta OpenAI:", data);
+
+    // Forma segura de leer respuesta
+    const text =
+      data?.output?.[0]?.content?.[0]?.text ||
+      "No se pudo generar análisis.";
+
+    return res.status(200).json({ text });
+
+  } catch (error) {
+    console.error("Error API:", error);
+    return res.status(500).json({
+      error: "Error interno",
+      detail: error.message
+    });
+  }
 }
