@@ -7,32 +7,48 @@ export default async function handler(req, res) {
   try {
     const { desc } = req.body;
 
-    // Aquí luego conectaremos OpenAI
-    const respuesta = `
+    const prompt = `
+Eres un dermatólogo estético de alto nivel.
+
+Analiza este caso:
+"${desc}"
+
+Responde en este formato:
+
 Evaluación inicial:
+(qué se observa sin diagnosticar)
 
-Se observa una intención de mejora en la estructura nasal.
+Qué significa:
+(interpretación estética)
 
-Esto generalmente implica ajuste en:
-- Dorso nasal (rectificación o definición)
-- Proyección de punta
-- Balance con mentón y labios
+Plan por etapas:
+(orden lógico clínico)
 
-Plan sugerido por etapas:
-1. Evaluación estructural completa en consulta
-2. Definición de puntos de soporte
-3. Ajuste progresivo (no sobrecorrección)
-
-Nota: La indicación precisa requiere valoración presencial.
+Nota final:
+(invitar a valoración presencial sin sonar comercial)
     `;
 
-    return res.status(200).json({
-      text: respuesta.trim()
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4.1-mini",
+        input: prompt
+      })
     });
+
+    const data = await response.json();
+
+    const text = data.output[0].content[0].text;
+
+    return res.status(200).json({ text });
 
   } catch (error) {
     return res.status(500).json({
-      error: "Error interno del servidor"
+      error: "Error en IA"
     });
   }
 }
