@@ -1,0 +1,32 @@
+body {
+background:#0b0b0b;
+color:#eaeaea;
+font-family:Helvetica, sans-serif;
+display:flex;
+justify-content:center;
+padding:40px;
+}
+.container {max-width:420px;width:100%;}
+textarea,input {
+width:100%;
+padding:12px;
+margin-bottom:15px;
+background:#111;
+border:1px solid #222;
+color:white;
+}
+button {
+width:100%;
+padding:14px;
+background:white;
+color:black;
+cursor:pointer;
+}
+canvas {margin-top:20px;width:100%;}
+a {
+margin-top:20px;
+display:block;
+background:#25D366;
+padding:12px;
+text-align:center;
+}

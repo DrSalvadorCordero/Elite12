@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evaluación Estética por Capas</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h1>Evaluación estética por capas</h1>
+
+<input type="file" id="image" accept="image/*">
+<textarea id="desc" placeholder="¿Qué te gustaría mejorar?"></textarea>
+
+<button onclick="analyze()">Analizar rostro</button>
+
+<canvas id="canvas"></canvas>
+
+<div id="result"></div>
+
+<a id="whatsappBtn" target="_blank"></a>
+
+</div>
+
+<script src="script.js"></script>
+<script src="overlay.js"></script>
+</body>
+</html>
