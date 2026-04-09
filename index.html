@@ -1,29 +1,40 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Evaluación Estética por Capas</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<div class="container">
-<h1>Evaluación estética por capas</h1>
+export default async function handler(req, res) {
+  try {
+    const { desc } = req.body;
 
-<input type="file" id="image" accept="image/*">
-<textarea id="desc" placeholder="¿Qué te gustaría mejorar?"></textarea>
+    const prompt = `
+Analiza este caso estético:
+${desc}
 
-<button onclick="analyze()">Analizar rostro</button>
+Responde:
+1. Qué se observa
+2. Qué significa
+3. Plan por etapas
 
-<canvas id="canvas"></canvas>
+Lenguaje clínico elegante.
+No diagnostiques.
+Dirige a valoración.
+`;
 
-<div id="result"></div>
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-5",
+        input: prompt
+      })
+    });
 
-<a id="whatsappBtn" target="_blank"></a>
+    const data = await response.json();
 
-</div>
+    const text = data.output?.[0]?.content?.[0]?.text || "Sin respuesta";
 
-<script src="script.js"></script>
-<script src="overlay.js"></script>
-</body>
-</html>
+    res.status(200).json({ text });
+
+  } catch (error) {
+    res.status(500).json({ error: "Error en API", detail: error.message });
+  }
+}
